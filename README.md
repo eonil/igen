@@ -9,7 +9,7 @@ Supported Languages & Implementations
 -------------------------------------
 - Swift
 
-Swift implementation uses `struct` to provide module-like
+Swift implementation uses `enum` to provide module-like
 namespace.
 
 Support for other languages will be added when I need it.
@@ -17,14 +17,17 @@ Support for other languages will be added when I need it.
 Design Choices
 --------------
 - This produces interfaces for out-of-process call.
-  This is everything is passed by copy, and peers do not
+  This means everything is passed by copy, and peers do not
   share anything.
+  In-process calls are harder to design and stable.
+  Maybe later.
 - As it is out-of-process, everything must be serializable.
-- Every intentions willl be passed as messages.
+- Every intentions will be passed as messages.
 - Designed only for bidirectional stream channels.
 - Designed only for bidirectional message streams.
-- There's no "return values". You have to design your protocol
-  to work without waiting for "return values".
+- There's no concept of "return values". 
+  You have to design your protocol to work without waiting 
+  for "return values". 
   This may sounds weird, but your protocol will be simpler
   and easier to maintain without "return values".
   See following chapters for details.
@@ -35,19 +38,22 @@ Design Choices
 - Uses JSON as default data encoding container. Other encodings
   can be added, but very unlikely.
 - Rust code is "the standard schema". Encoded data will be generated
-  based on Rust code.
+  based on Rust code. 
+- Not all Rust data structures are supported. Only value-semantic
+  and fully cloneable types will be supported.
 
 "No"
 ----
 - "return values".
 - Concept of "function call". There's only "messages".
 - Encoding of pointers or references. They're not serializable.
-- Fixed sized array.
+- Fixed sized array. 
+  This is indistinguisable with dynamic sized array.
 
 "Not Yet"
 ---------
-- Versioning. Backward compatibility can be implemented
-  without magic numbers by diffing VCS history.
+- Versioning. Backward compatibility can be implicitly 
+  implemented without magic numbers by diffing VCS history.
 
 Designing Protocol without Return Values
 ----------------------------------------
@@ -61,12 +67,11 @@ Implementations
 It's really hard to get fully qualified type paths from Rust
 compiler. I'm not familiar with the compiler, and I abandoned
 using compiler directly at some point. Helps are welcome.
-Instead, `igen` uses forked `rustdoc` code which already has
+Instead, `mgen` uses forked `rustdoc` code which already has
 a complete type path resolution support. Due to dependencies of
 `rustdoc`, whole Rust compiler is added as a dependency and
 this is unavoidable until Rust compiler provide more convenient
 facility to query fully qualified type paths.
-
 
 
 

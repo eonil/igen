@@ -25,12 +25,16 @@ extern crate rustc_metadata;
 extern crate rustc_target;
 extern crate rustc_typeck;
 extern crate serialize;
-#[macro_use] extern crate syntax;
+extern crate syntax;
 extern crate syntax_pos;
 #[macro_use] extern crate log;
 extern crate rustc_errors as errors;
 extern crate rustdoc;
 extern crate serialize as rustc_serialize; // used by deriving
+extern crate serde;
+#[macro_use] extern crate serde_derive;
+
+mod schema;
 
 use errors::ColorConfig;
 use std::collections::{BTreeMap, BTreeSet};
@@ -368,12 +372,13 @@ fn rust_input(cratefile: PathBuf,
 
         info!("finished with rustc");
         krate.name = crate_name.unwrap_or(krate.name);
-
         krate.version = crate_version;
 
-println!("{:#?}", krate);
+        let module = schema::Module::scan(&krate);
+        module.gen_swift_code();
+        
         //tx.send(f(Output { krate: krate, renderinfo: renderinfo, passes: passes })).unwrap();
-        tx.send(());
+        tx.send(()).unwrap();
     }));
     rx.recv().unwrap();
 }

@@ -1,19 +1,20 @@
 [package]
-name = "igen"
+name = "mgen"
 version = "0.1.0"
 authors = ["eonil <pub.dev@eonil.com>"]
 
 [dependencies]
+rustdoc = { path = "../../submodule/rust/src/librustdoc" }
+serde = "1.0.70"
+serde_derive = "1.0.70"
+
 #rustc                   =   { path = "../../submodule/rust/src/librustc" }
 #rustc_data_structures   =   { path = "../../submodule/rust/src/librustc_data_structures" }
 #rustc_driver            =   { path = "../../submodule/rust/src/librustc_driver" }
 #rustdoc                 =   { path = "../../submodule/rust/src/librustdoc" }
-
 #core = { path = "../../submodule/rust/src/libcore" }
 #std = { path = "../../submodule/rust/src/libstd" }
-
-rustdoc = { path = "../../submodule/rust/src/librustdoc" }
-
 #pulldown-cmark = { version = "0.1.2", default-features = false }
 #minifier = "0.0.14"
 #tempfile = "3"
+
